@@ -31,6 +31,11 @@ class REST{
     await client.post(url + "/addProduct/", body: { 'name': product.name, 'quantity': product.quantity.toString(), 'category': product.category, 'barcode': product.barcode});
   }
 
+  static Future acquireProduct(String name, int quantity) async {
+    print('Acquiring $quantity pieces of $name');
+    await client.post(url + '/delete/', body: {'name': name, 'quantity': quantity.toString()});
+  }
+
   static List<Product> getProductsFromJson(respData) {
     List<Product> products = List<Product>();
     for (var prod in respData){

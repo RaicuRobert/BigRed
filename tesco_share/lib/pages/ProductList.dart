@@ -123,7 +123,7 @@ class ProductListState extends State<ProductList>{
                     //itemExtent: 300.0, // THIS IS THE HEIGHT OF THE ITEM!!!!
                     shrinkWrap: true,
                     itemCount: products.length,
-                    itemBuilder: (_, index) => new ProductRow(products[index]),
+                    itemBuilder: (_, index) => new ProductRow(context, products[index]),
                   ),
                 ),
               )])
@@ -146,8 +146,9 @@ class ProductListState extends State<ProductList>{
 
 class ProductRow extends StatelessWidget{
   final Product product;
+  final BuildContext parentContext;
 
-  ProductRow(this.product);
+  ProductRow(this.parentContext, this.product);
 
   @override
   Widget build(BuildContext context) {
@@ -219,6 +220,8 @@ class ProductRow extends StatelessWidget{
       context: context,
       builder: (context) => QuantityPickerDialog(product)
     );
+    parentContext.widget.createElement();
+
 
   }
 
@@ -260,7 +263,7 @@ class QuantityPickerDialogState extends State<QuantityPickerDialog>{
           divisions: product.quantity-1,
           onChanged: (value) {
             setState((){
-              number = value;
+              number = value.toDouble();
             });
           },
         ),
@@ -277,6 +280,7 @@ class QuantityPickerDialogState extends State<QuantityPickerDialog>{
         FlatButton(
           onPressed: () {
             // RESERVE THE PRODUCT
+            REST.acquireProduct(product.name, number.toInt());
             Navigator.of(context).pop();
           },
           child: Text('Reserve!'),

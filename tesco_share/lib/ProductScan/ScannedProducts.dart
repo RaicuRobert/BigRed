@@ -59,7 +59,7 @@ class ScannedProductsViewState extends State<ScannedProductsView> {
   void _sendItems(){
     for(ProductScannedInfo productScannedInfo in scannedProducts)
      {
-       Product product = new Product(productScannedInfo.apiData == null? productScannedInfo.barcode : productScannedInfo.apiData.description, "", productScannedInfo.quantity, productScannedInfo.barcode);
+       Product product = new Product(productScannedInfo.apiData == null? productScannedInfo.barcode : productScannedInfo.apiData.description, "a", productScannedInfo.quantity, productScannedInfo.barcode);
        REST.addProduct(product);
      }
     scannedProducts.clear();
