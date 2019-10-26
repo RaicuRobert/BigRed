@@ -28,6 +28,10 @@ class MapSampleState extends State<MapSample> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      appBar: AppBar(
+        title: Text("Nearby shops"),
+
+      ),
       body: GoogleMap(
         initialCameraPosition: _kLake,
         markers: _markers,
@@ -48,7 +52,6 @@ class MapSampleState extends State<MapSample> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
 
-    final response = await http.get('https://dev.tescolabs.com/locations/search?sort=near: "47.4754267,19.0979369"', headers: {"Ocp-Apim-Subscription-Key": "abb267cda5ed4e089d9d94fb3d4f50c8"});
     setState(() {
       _markers.clear();
       _markers.add(Marker(
@@ -61,6 +64,7 @@ class MapSampleState extends State<MapSample> {
         icon: BitmapDescriptor.defaultMarkerWithHue(200),
       ));
     });
+    final response = await http.get('https://dev.tescolabs.com/locations/search?sort=near: "47.4754267,19.0979369"', headers: {"Ocp-Apim-Subscription-Key": "abb267cda5ed4e089d9d94fb3d4f50c8"});
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
       for(var data in json.decode(response.body)['results']) {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tesco_share/model/ProductScannedInfo.dart';
 
+import 'model/Shop.dart';
+
 var darkColor = MaterialColor(0xFF7DB419, const<int, Color>{
   50: _dark,
   100: _dark,
@@ -32,6 +34,8 @@ Color lightColor = MaterialColor(0xFFA4E30D, const<int, Color>{
 const _color = Color(0xFFA4E30D);
 const _dark = Color(0xFF7DB419);
 //MaterialColor lightColor = MaterialColor(0x49f540, color);
+
+List<Shop> shops = new List<Shop>();
 
 var logoPath = "images/logo_transparent.png";
 var categories = ["Uncategorized", "Bakery", "Fruit&Vegetables", "Meat", "Chilled Foods", "Flowers&Herbs", "Others"];
