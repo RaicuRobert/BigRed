@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_mobile_vision/flutter_mobile_vision.dart';
 import 'package:intl/intl.dart';
+import 'package:tesco_share/ProductScan/ScannedProducts.dart';
 import 'package:tesco_share/model/Product.dart';
 import 'package:tesco_share/model/ProductScannedInfo.dart';
+import 'package:tesco_share/Constants.dart';
 
 
 class ScannedProductView extends StatefulWidget {
@@ -19,11 +21,10 @@ class ScannedProductViewState extends State<ScannedProductView> {
   TextEditingController _quantityController = new TextEditingController();
 
 
-  DateFormat format = new DateFormat("dd.MMM.yy");
+  DateFormat format = new DateFormat("dd.MM.yy");
   DateFormat formatFull = new DateFormat("dd.MM.yyyy");
 
   ScannedProductViewState(){
-    _productScannedInfo.barcode = "Not set";
     _productScannedInfo.canBeFrozen = false;
     _productScannedInfo.quantity = 1;
     _quantityController.value = new TextEditingValue(text: _productScannedInfo.quantity.toString());
@@ -93,15 +94,21 @@ class ScannedProductViewState extends State<ScannedProductView> {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 16.0, horizontal: 16.0),
                                       child: RaisedButton(
-                                          onPressed: () {
+                                          onPressed: _productScannedInfo.isValid()? () {
                                             final form = _formKey.currentState;
                                             if (form.validate()) {
                                               form.save();
+                                              scannedProducts.add(_productScannedInfo);
+                                              Navigator.push(context,MaterialPageRoute(
+                                                  builder: (context) => ScannedProductsView()
+                                              ));
                                               //_user.save();
-                                              _showDialog(context);
+                                              //_showDialog(context);
                                             }
+                                          }: (){
+                                            Navigator.pop(context);
                                           },
-                                          child: Text('Save'))),
+                                          child: Text(_productScannedInfo.isValid() ? 'Save' : 'Invalid'))),
                             ])));})))));
       }
   _showDialog(BuildContext context) {

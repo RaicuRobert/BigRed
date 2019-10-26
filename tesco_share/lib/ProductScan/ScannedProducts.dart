@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tesco_share/Constants.dart';
+import 'package:tesco_share/model/ProductScannedInfo.dart';
 
 import 'ScannedProductView.dart';
 
-class ScannedProductsView extends StatelessWidget {
+class ScannedProductsView extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() => ScannedProductsViewState();
+}
+
+class ScannedProductsViewState extends State<ScannedProductsView> {
 
   Widget _buildBar(BuildContext context) {
     return new AppBar(
@@ -44,12 +50,27 @@ class ScannedProductsView extends StatelessWidget {
       itemCount: scannedProducts.length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text(scannedProducts[index].barcode),
+          title: Text(_displayName(scannedProducts[index])),
+          subtitle: Text('Quantity: ${scannedProducts[index].quantity}'),
         );
       },
       separatorBuilder: (context, index) {
         return Divider();
       },
     ))  ;
+  }
+
+  String _displayName(ProductScannedInfo scannedProduct){
+     if(scannedProduct.apiData == null){
+       scannedProduct.GetProductData().then((bcinfo){
+         setState(() {
+
+         });
+       });
+       return scannedProduct.barcode;
+     }else{
+       return '${scannedProduct.apiData.brand} - ${scannedProduct.apiData.description}';
+     }
+
   }
 }
