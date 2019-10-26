@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobile_vision/flutter_mobile_vision.dart';
-import './barcode_detail.dart';
-
+import 'package:tesco_share/ProductScan/ScannedProducts.dart';
+import 'package:tesco_share/model/ProductScannedInfo.dart';
+import 'package:tesco_share/Constants.dart';
 
 enum Step {
   ScanBarcode,
@@ -18,69 +19,89 @@ class ScannerView extends StatefulWidget {
 }
 
 class _ScannerViewState extends State<ScannerView> {
-  var _barcode;
-  var _expiryDate;
-  var _useByDate;
-
+  ProductScannedInfo _product;
+  int _step;
 
 @override
   void initState() {
     super.initState();
     FlutterMobileVision.start();
+    setState(() {
+      _step = 0;
+      _product = new ProductScannedInfo();
+    });
+  }
+  Widget _buildBar(BuildContext context) {
+    return new AppBar(
+      centerTitle: true,
+      title: Text("Scanner"),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return _getBarcodeScreen(context);
+
+    return Scaffold(
+        appBar: _buildBar(context),
+        body: Column(
+            children: <Widget>[Flexible(
+              child: new Container(
+                color: Colors.white,
+                child: _Tree(BuildContext),
+              ),
+            )]
+        ));
+
+  }
+
+  String _getCurrentStep(){
+    switch(_step){
+      case 0: return "Scan Barcode"; break;
+      case 1: return "Does it have a UseBy date?"; break;
+      case 2: return "Does it have a DisplayBefore or BestUntil date?"; break;
+      default: return "None";
+    }
+  }
+
+  Widget _Tree(BuildContext){
+      if(_step >=3){
+        return _checkData();
+      }
+      else{
+        return _questionScreen(context);
+      }
   }
 
   Widget _questionScreen(BuildContext context){
-      return Center();
+      return Center(child: Column(
+        children: <Widget>[
+          Text(_getCurrentStep()),
+          ButtonBar(children: <Widget>[
+            FlatButton(child: Text("No"),color: Colors.red, onPressed: _skipStep),
+            FlatButton(child: Text("Yes"),color: Colors.green, onPressed: _doStep,)
+          ],)
+        ],
+      ),);
   }
 
-  ///
-  /// Barcode Screen
-  ///
-  Widget _getBarcodeScreen(BuildContext context) {
-    List<Widget> items = [];
-
-    items.add(
-      new Padding(
-        padding: const EdgeInsets.only(
-          left: 18.0,
-          right: 18.0,
-          bottom: 12.0,
-        ),
-        child: new RaisedButton(
-          onPressed: _scan,
-          child: new Text('SCAN!'),
-        ),
-      ),
-    );
-
-    items.addAll(
-      ListTile.divideTiles(
-        context: context,
-        tiles: _barcode
-            .map(
-              (barcode) => new BarcodeWidget(barcode),
-        )
-            .toList(),
-      ),
-    );
-
-    return new ListView(
-      padding: const EdgeInsets.only(
-        top: 12.0,
-      ),
-      children: items,
-    );
+  void _doStep(){
+    switch(_step){
+      case 0: _scanBarcode(); break;
+      case 1: _scanOcr().then((str) => setState(() => this._product.useByDate = str )); break;
+      case 2: _scanOcr().then((str) => setState(() => this._product.expiryDate = str ));  break;
+    }
+    _skipStep();
   }
 
+  void _skipStep(){
+    setState(() {
+      _step = _step+1;
+    });
+  }
   ///
   /// Barcode Method
   ///
-  Future<Null> _scan() async {
+  Future<Null> _scanBarcode() async {
     List<Barcode> barcodes = [];
     try {
       barcodes = await FlutterMobileVision.scan(
@@ -95,37 +116,48 @@ class _ScannerViewState extends State<ScannerView> {
         fps: 15.0,
       );
     } on Exception {
-      barcodes.add(new Barcode('Failed to get barcode.'));
     }
 
     if (!mounted) return;
 
-    setState(() => _barcodes = barcodes);
+    setState(() => _product.barcode = barcodes.first.rawValue);
   }
-}
-///
-/// BarcodeWidget
-///
-class BarcodeWidget extends StatelessWidget {
-  final Barcode barcode;
 
-  BarcodeWidget(this.barcode);
+  Future<String> _scanOcr() async {
+    List<OcrText> texts = [];
+    RegExp regExp = new RegExp("[0-9]+\.[0-9]+\.[0-9]+");
+    try {
+      texts = await FlutterMobileVision.read(
+        flash: false,
+        autoFocus: true,
+        multiple: false,
+        waitTap: true,
+        showText: true,
+        preview: FlutterMobileVision.getPreviewSizes(FlutterMobileVision.CAMERA_BACK).first,
+        camera: FlutterMobileVision.CAMERA_BACK,
+        fps: 2.0,
+      );
+    } on Exception {
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    return new ListTile(
-      leading: const Icon(Icons.star),
-      title: new Text(barcode.displayValue),
-      subtitle: new Text(
-        '${barcode.getFormatString()} (${barcode.format}) - '
-            '${barcode.getValueFormatString()} (${barcode.valueFormat})',
-      ),
-      trailing: const Icon(Icons.arrow_forward),
-      onTap: () => Navigator.of(context).push(
-        new MaterialPageRoute(
-          builder: (context) => new BarcodeDetail(barcode),
-        ),
-      ),
-    );
+    if (!mounted) return null;
+    return texts.map((text) => regExp.firstMatch(text.value).group(0)).first;
   }
+ Widget _checkData(){
+   return Column(children: <Widget>[
+     Text(_product.barcode),
+     Text(_product.useByDate),
+     Text(_product.expiryDate),
+     FlatButton(child: Text("Confirm"), onPressed: _addToGlobalScannedList,)
+
+   ]);
+ }
+
+ _addToGlobalScannedList(){
+   scannedProducts.add(_product);
+   Navigator.push(context,MaterialPageRoute(
+       builder: (context) => ScannedProductsView()
+   ));
+ }
+
 }

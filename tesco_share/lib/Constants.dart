@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tesco_share/model/ProductScannedInfo.dart';
 
 var darkColor = MaterialColor(0xFF7DB419, const<int, Color>{
   50: _dark,
@@ -33,3 +34,5 @@ const _dark = Color(0xFF7DB419);
 //MaterialColor lightColor = MaterialColor(0x49f540, color);
 
 var logoPath = "images/logo_transparent.png";
+
+List<ProductScannedInfo> scannedProducts = new List<ProductScannedInfo>();
