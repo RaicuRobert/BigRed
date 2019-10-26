@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tesco_share/Constants.dart';
+import 'package:tesco_share/ProductScan/ScannedProducts.dart';
 import 'package:tesco_share/pages/CategoryList.dart';
 
 class Login extends StatefulWidget{
@@ -105,8 +106,8 @@ class LoginState extends State<Login>{
     //bool succeeded = await REST.tryToLogIn(usernameController.text, passwordController.text);
     bool succeeded = true;
     print("Succeeded to log in?  " + succeeded.toString());
-    if (succeeded)  // if this is a legit user, redirect to the main page and set a sort of cookie or whatevs
-        {
+    if (usernameController.value.text == 'charity')  // if this is a legit user, redirect to the main page and set a sort of cookie or whatevs
+      {
       Navigator.push(context,
           MaterialPageRoute(
               builder: (context) => CategoryList()
@@ -114,7 +115,14 @@ class LoginState extends State<Login>{
       );
     }
 
-
+    if (usernameController.value.text == 'shop')  // if this is a legit user, redirect to the main page and set a sort of cookie or whatevs
+        {
+      Navigator.push(context,
+          MaterialPageRoute(
+              builder: (context) => ScannedProductsView()
+          )
+      );
+    }
   }
 
 

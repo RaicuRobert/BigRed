@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobile_vision/flutter_mobile_vision.dart';
+import 'package:tesco_share/ProductScan/ScannedProducts.dart';
 import 'package:tesco_share/model/ProductScannedInfo.dart';
-
+import 'package:tesco_share/Constants.dart';
 
 enum Step {
   ScanBarcode,
@@ -146,7 +147,17 @@ class _ScannerViewState extends State<ScannerView> {
    return Column(children: <Widget>[
      Text(_product.barcode),
      Text(_product.useByDate),
-     Text(_product.expiryDate)
+     Text(_product.expiryDate),
+     FlatButton(child: Text("Confirm"), onPressed: _addToGlobalScannedList,)
+
    ]);
  }
+
+ _addToGlobalScannedList(){
+   scannedProducts.add(_product);
+   Navigator.push(context,MaterialPageRoute(
+       builder: (context) => ScannedProductsView()
+   ));
+ }
+
 }
