@@ -17,36 +17,23 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} ${ctx.response.status} - ${ms}ms`);
 });
 
-const getRandomInt = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
-};
-
-const gameSampleNames = ['Traloth', 'Galukoth', 'Zearin', 'Gwylia'];
-const gameTypes = ['action', 'adventure', 'board'];
-const statusTypes = ['available', 'sold', 'rent'];
-const games = [];
-for (let i = 0; i < 5; i++) {
-  games.push({
-    id: i + 1,
-    name: gameSampleNames[getRandomInt(0, gameSampleNames.length - 1)] + " " + (i + 1),
-    type: gameTypes[getRandomInt(0, gameTypes.length - 1)],
-    status: statusTypes[0],
-    quantity: getRandomInt(1, 5)
-  });
-}
 
 const router = new Router();
 router.get('/', ctx => {
   ctx.response.body = 'I am server';
 });
 
-router.get('/all', ctx => {
-  ctx.response.body = games;
-  ctx.response.status = 200;
-});
 
+products = [
+  {'name': 'Banana', 'category':'Fruit&Vegetable', 'quantity':7, 'barcode': '872353'},
+  {'name': 'Tomato', 'category':'Fruit&Vegetable', 'quantity':6, 'barcode': '546742'},
+  {'name': 'Orange', 'category':'Fruit&Vegetable', 'quantity':20, 'barcode': '913468'},
+  {'name': 'Tesco British Chicken Breast Portions 650G', 'category':'Meat', 'quantity':7, 'barcode': '9163539'},
+  {'name': 'Richmond 12 Thick Pork Sausages 681G', 'category': 'Meat', 'quantity':3, 'barcode': '091374'},
+  {'name': 'Tesco Smoked Thick Cut Back Bacon 300G', 'category': 'Meat', 'quantity':5, 'barcode': '661083'}
+]
+
+requestedProducts = []
 
 const broadcast = (data) =>
   wss.clients.forEach((client) => {
@@ -55,76 +42,69 @@ const broadcast = (data) =>
     }
   });
 
+// GET ALL PRODUCTS
+router.get('/all', ctx =>{
+  ctx.response.body = products;
+  ctx.response.status = 200;
+});
 
-router.post('/addGame', ctx => {
+// GET PRODUCTS IN A GIVEN CATEGORY
+router.get('/category/:category', ctx =>{
+  const category = ctx.params.category;
+  console.log(category)
+  prods = []
+  for (var prod  of products)
+    {
+      console.log(prod['category'])
+      if (prod['category'] == category)
+        prods.push(prod);
+    }
+
+  ctx.response.body = prods;
+  ctx.response.status = 200;
+});
+
+// ADD A NEW PRODUCT 
+router.post('/addProduct', ctx =>{
   const headers = ctx.request.body;
-  console.log("body: " + JSON.stringify(headers));
+  console.log(headers);
   const name = headers.name;
-  const type = headers.type;
-  if (typeof name !== 'undefined' && typeof type !== 'undefined') {
-    const index = games.findIndex(game => game.name === name && game.type === type);
-    if (index === -1) {
-      let maxId = Math.max.apply(Math, games.map(function (game) {
-        return game.id;
-      })) + 1;
-      let game = {
-        id: maxId,
-        name,
-        type,
-        status: statusTypes[0],
-        quantity: 1
-      };
-      games.push(game);
-      broadcast(game);
-      ctx.response.body = game;
-      ctx.response.status = 200;
-    } else {
-      let game = games[index];
-      game.quantity = game.quantity + 1;
-      game.status = statusTypes[0];
-      ctx.response.body = game;
-      ctx.response.status = 200;
-    }
-  } else {
-    ctx.response.body = {text: 'Missing name or type'};
-    ctx.response.status = 404;
-  }
+  const category = headers.category;
+  const quantity = headers.quantity;
+  const barcode = headers.barcode;
+  console.log('Adding product with name ' + name + ', category ' + category + ', quantity ' + quantity + ', barcode: ' + barcode);
+  var newProd = {'name': name, 'category': category, 'quantity': quantity, 'barcode': barcode};
+  products.push(newProd);
+  ctx.response.status = 200;
 });
 
-
-router.post('/rentGame', ctx => {
-  // console.log("ctx: " + JSON.stringify(ctx));
-  const headers = ctx.request.body;
-  console.log("body: " + JSON.stringify(headers));
-  const id = headers.id;
-  if (typeof id !== 'undefined') {
-    const index = games.findIndex(game => game.id == id);
-    if (index === -1) {
-      console.log("No game with id: " + id);
-      ctx.response.body = {text: 'Invalid id'};
-      ctx.response.status = 404;
-    } else {
-      let game = games[index];
-      if (game.status !== statusTypes[0]) {
-        ctx.response.body = {text: 'No more games'};
-        ctx.response.status = 404;
-      } else {
-        if (game.quantity < 1) {
-          game.status = statusTypes[1];
-          ctx.response.body = {text: 'No more games of this type'};
-          ctx.response.status = 404;
-        } else {
-          game.quantity = game.quantity - 1;
-          ctx.response.body = game;
-          ctx.response.status = 200;
+//DELETE A PRODUCT
+router.post('/delete', ctx =>{
+  const parameters = ctx.request.body;
+  console.log(ctx.request.headers);
+  const name = parameters.name;
+  console.log(parameters.quantity);
+  const quantity = parseInt(parameters.quantity);
+  console.log(quantity);
+  // find the product
+  for (var i = 0; i < products.length; i++){
+    prod = products[i];
+    if (prod['name'] == name){
+      var currQuantity = prod['quantity'];
+      if (currQuantity - quantity == 0)
+        {
+          products.splice(i,1);
+          return;
         }
-      }
+      else
+        prod['quantity'] = currQuantity - quantity;
+      var requestedProd = {'name': prod['name'], 'category': prod['category'], 'quantity': quantity, 'barcode': prod['barcode']}
+      requestedProducts.push(requestedProd);
     }
-  } else {
-    ctx.response.body = {text: 'Id missing'};
-    ctx.response.status = 404;
   }
+  ctx.response.status = 200;
 });
+
 
 
 
