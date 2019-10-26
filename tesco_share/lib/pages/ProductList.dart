@@ -1,6 +1,7 @@
 import 'dart:ui' as prefix0;
 
 import 'package:flutter/material.dart';
+import 'package:tesco_share/REST.dart';
 import 'package:tesco_share/model/Product.dart';
 
 import 'package:tesco_share/Constants.dart';
@@ -20,20 +21,45 @@ class ProductListState extends State<ProductList>{
   ProductListState(this.category);
   bool iconPressed = false;
   var products;
+  var chosenProducts = List<Product>();
   bool showRequests = false;
   var str = "Available";
 
   @override
   Widget build(BuildContext context) {
 
-    if (showRequests == true){
-      products = getDumbProducts();
+    var notificationIcon = Icon(iconPressed ? Icons.notifications_active : Icons.notifications);
+
+    if (showRequests == false){
+      if (products == null)
+        {
+          initializeProductsFromServer();
+          return Scaffold(
+              appBar: AppBar(
+                title: Text("$category"),
+                actions: <Widget>[
+                  // Notify Button
+                  IconButton(
+                    icon: notificationIcon,
+                    onPressed: () {
+                      setState(() {
+                        iconPressed = !iconPressed;
+                      });
+                    },
+                  )
+                ],
+              ),
+            body: Center(
+              child: CircularProgressIndicator(backgroundColor: lightColor,)
+            )
+          );
+
+        }
     }
     else {
-      products = getDumbProducts();
+      products = chosenProducts;
     }
 
-    var notificationIcon = Icon(iconPressed ? Icons.notifications_active : Icons.notifications);
     return Scaffold(
         appBar: AppBar(
           title: Text("$category"),
@@ -72,13 +98,13 @@ class ProductListState extends State<ProductList>{
                   });
                   var newProducts;
                   if (showRequests == true){
-                    newProducts = getDumbProducts();
+                    newProducts = chosenProducts;
                     setState(() {
                       str = "Already requested";
                     });
                   }
                   else{
-                    newProducts = getDumbProducts();
+                    initializeProductsFromServer();
                     setState(() {
                       str = "Available";
                     });
@@ -104,16 +130,18 @@ class ProductListState extends State<ProductList>{
     );
   }
 
-  List<Product> getDumbProducts() {
-    var products = List<Product> ();
-    products.add(Product("Banana", 7));
-    products.add(Product("Chicken wings", 8));
-    products.add(Product("Tomato", 10));
-    products.add(Product("Milk", 3));
-
-    return products;
+  void initializeProductsFromServer() {
+    Future<List<Product>> allProductsFuture;
+    if (category != null)
+      allProductsFuture = REST.getProductsByCategory(category);
+    else
+      allProductsFuture = REST.getAllProducts();
+    allProductsFuture.then((allProducts){
+      setState(() {
+        this.products = allProducts;
+      });
+    });
   }
-
 }
 
 class ProductRow extends StatelessWidget{
@@ -141,7 +169,7 @@ class ProductRow extends StatelessWidget{
 
     final planetCard = new Container(
         width: 550,
-        height: 70,
+        height: 90,
         margin: const EdgeInsets.only(left: 3.0, right: 3.0),
         decoration: new BoxDecoration(
             shape: BoxShape.rectangle,
