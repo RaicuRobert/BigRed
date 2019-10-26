@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tesco_share/pages/ProductList.dart';
 
 import '../Colors.dart';
 
@@ -148,13 +149,13 @@ class CategoryRow extends StatelessWidget{
 
     return new Container(
 //        height: 100.0,
-      margin: const EdgeInsets.only(top: 10.0, bottom: 8.0),
+      margin: const EdgeInsets.only(top: 20.0, bottom: 8.0),
       child: new FlatButton(
         onPressed: () => {
-//          Navigator.push(context,
-//              MaterialPageRoute(
-//                  builder: (context) => ProductList(category)
-//              ))
+          Navigator.push(context,
+              MaterialPageRoute(
+                  builder: (context) => ProductList(category)
+              ))
         },
 
         child: new Stack(
