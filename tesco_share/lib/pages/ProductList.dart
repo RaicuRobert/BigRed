@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tesco_share/model/Product.dart';
 
-import '../Colors.dart';
+import 'package:tesco_share/Constants.dart';
 
 class ProductList extends StatefulWidget{
 

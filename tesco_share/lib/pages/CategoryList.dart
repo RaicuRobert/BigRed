@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tesco_share/pages/ProductList.dart';
 
-import '../Colors.dart';
+import 'package:tesco_share/Constants.dart';
 
 class CategoryList extends StatefulWidget{
   @override

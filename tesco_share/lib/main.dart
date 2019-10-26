@@ -3,7 +3,7 @@ import 'package:tesco_share/ProductScan/ScannerView.dart';
 import 'package:tesco_share/pages/CategoryList.dart';
 import 'package:tesco_share/pages/Login.dart';
 
-import 'Colors.dart';
+import 'package:tesco_share/Constants.dart';
 
 void main() => runApp(MyApp());
 
