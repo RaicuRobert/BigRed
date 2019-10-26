@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tesco_share/Vision/Vision.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(VisionApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
