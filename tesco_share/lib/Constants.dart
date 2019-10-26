@@ -34,5 +34,5 @@ const _dark = Color(0xFF7DB419);
 //MaterialColor lightColor = MaterialColor(0x49f540, color);
 
 var logoPath = "images/logo_transparent.png";
-
+var categories = ["Uncategorized", "Bakery", "Fruit&Vegetables", "Meat", "Chilled Foods", "Flowers&Herbs", "Others"];
 List<ProductScannedInfo> scannedProducts = new List<ProductScannedInfo>();

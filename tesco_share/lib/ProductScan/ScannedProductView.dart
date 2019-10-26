@@ -113,6 +113,32 @@ class ScannedProductViewState extends State<ScannedProductView> {
                                           onSaved: (val) =>
                                               setState(() => _productScannedInfo.quantity = int.parse(val)),
                                         ),)),
+                                  DropdownButton<String>(
+                                    value: _productScannedInfo.category,
+                                    icon: Icon(Icons.arrow_downward),
+                                    iconSize: 24,
+                                    elevation: 16,
+                                    style: TextStyle(
+                                        color: Colors.deepPurple
+                                    ),
+                                    underline: Container(
+                                      height: 2,
+                                      color: Colors.deepPurpleAccent,
+                                    ),
+                                    onChanged: (String newValue) {
+                                      setState(() {
+                                        _productScannedInfo.category = newValue;
+                                      });
+                                    },
+                                    items: categories
+                                        .map<DropdownMenuItem<String>>((String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    })
+                                        .toList(),
+                                  ),
                                   Container(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 16.0, horizontal: 16.0),
