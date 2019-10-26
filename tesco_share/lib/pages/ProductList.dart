@@ -1,3 +1,5 @@
+import 'dart:ui' as prefix0;
+
 import 'package:flutter/material.dart';
 import 'package:tesco_share/model/Product.dart';
 
@@ -90,7 +92,7 @@ class ProductListState extends State<ProductList>{
               ,Flexible(
                 child: new Container(
                   padding: EdgeInsets.only(left: 10, right: 10, top: 30, bottom: 10),
-                  color: Colors.white,
+//                  color: Colors.white,
                   child: new ListView.builder(
                     //itemExtent: 300.0, // THIS IS THE HEIGHT OF THE ITEM!!!!
                     shrinkWrap: true,
@@ -123,10 +125,10 @@ class ProductRow extends StatelessWidget{
   Widget build(BuildContext context) {
     final planetThumbnail = new Container(
         alignment: new FractionalOffset(0.0, 0.5),
-        margin: const EdgeInsets.only(top: 10.0, left: 260),
+        margin: const EdgeInsets.only(top: 10.0),
         child: new Container(
-          width: 80.0,
-          height: 80.0,
+          width: 60.0,
+          height: 60.0,
           decoration: new BoxDecoration(
             shape: BoxShape.circle,
             image: new DecorationImage(
@@ -139,25 +141,24 @@ class ProductRow extends StatelessWidget{
 
     final planetCard = new Container(
         width: 550,
-        height: 100,
+        height: 70,
         margin: const EdgeInsets.only(left: 3.0, right: 3.0),
         decoration: new BoxDecoration(
             shape: BoxShape.rectangle,
             borderRadius: new BorderRadius.circular(10.0),
-            color: lightColor,
         ),
         child: Container(
             height: 100,
-            margin: const EdgeInsets.only(top: 16.0, left: 45.0, right: 10),
+            margin: const EdgeInsets.only(top: 16.0, left: 60.0, right: 10),
             constraints: new BoxConstraints.expand(),
             child: new Column(
 
               children: <Widget>[Align(alignment: Alignment.topLeft,child:Text(this.product.name, style: TextStyle(color: Colors.black,
-                  fontSize: 20.0, fontWeight: FontWeight.w400))
+                  fontSize: 18.0))
               ),
-                SizedBox(height:5),
-                Align(alignment: Alignment.topLeft,child:Text(" X "+ product.quantity.toString(), style: TextStyle(color: Colors.white,
-                    fontSize: 18.0)
+                SizedBox(height:6),
+                Align(alignment: Alignment.topLeft,child:Text(" X "+ product.quantity.toString(), style: TextStyle(color: darkColor,
+                    fontSize: 13.0)
                 )),
                 SizedBox(height:5),
 //                Text("Some other text", style: TextStyle(color: Colors.white,
