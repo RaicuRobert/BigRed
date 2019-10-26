@@ -4,6 +4,7 @@ import 'package:tesco_share/Constants.dart';
 import 'package:tesco_share/ProductScan/ScannedProducts.dart';
 
 import 'package:tesco_share/pages/CategoryList.dart';
+import 'package:tesco_share/pages/CharityMainPage.dart';
 
 class Login extends StatefulWidget{
 
@@ -112,7 +113,7 @@ class LoginState extends State<Login>{
       {
       Navigator.push(context,
           MaterialPageRoute(
-              builder: (context) => CategoryList()
+              builder: (context) => CharityMainPage()
           )
       );
     }

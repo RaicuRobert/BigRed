@@ -90,6 +90,7 @@ class CategoryListState extends State<CategoryList>{
 
     return Scaffold(
         appBar: _buildBar(context),
+
         body: Column(
             children: <Widget>[Flexible(
               child: new Container(
@@ -117,18 +118,18 @@ class CategoryRow extends StatelessWidget{
           width: 50.0,
           height: 50.0,
           decoration: new BoxDecoration(
-            //shape: BoxShape.circle,
-//                  image: new DecorationImage(
-//                    fit: BoxFit.fill,
-//                    image:  AssetImage("images/${this.category}.png")
-//                  ),
+//            shape: BoxShape.circle,
+                  image: new DecorationImage(
+                    fit: BoxFit.fill,
+                    image:  AssetImage("images/${this.category}.png")
+                  ),
           ),
         )
     );
 
     final planetCard = new Container(
         height: 140,
-        margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+        margin: const EdgeInsets.only(left: 30.0, right: 30.0),
         decoration: new BoxDecoration(
           color: lightColor,
           shape: BoxShape.rectangle,
