@@ -3,6 +3,7 @@ import 'package:tesco_share/pages/ProductList.dart';
 
 import 'package:tesco_share/Constants.dart';
 
+
 class CategoryList extends StatefulWidget{
   @override
   CategoryListState createState() => CategoryListState();
@@ -129,7 +130,7 @@ class CategoryRow extends StatelessWidget{
         height: 140,
         margin: const EdgeInsets.only(left: 20.0, right: 20.0),
         decoration: new BoxDecoration(
-          color: darkColor,
+          color: lightColor,
           shape: BoxShape.rectangle,
           borderRadius: new BorderRadius.circular(30.0),
         ),
