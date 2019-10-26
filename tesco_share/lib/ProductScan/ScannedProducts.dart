@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tesco_share/Constants.dart';
 
-import 'ScannerView.dart';
+import 'ScannedProductView.dart';
 
 class ScannedProductsView extends StatelessWidget {
 
@@ -35,7 +35,7 @@ class ScannedProductsView extends StatelessWidget {
 
   void _scanItem(context){
     Navigator.push(context,MaterialPageRoute(
-        builder: (context) => ScannerView()
+        builder: (context) => ScannedProductView()
     ));
   }
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tesco_share/ProductScan/ScannerView.dart';
-import 'package:tesco_share/pages/CategoryList.dart';
 import 'package:tesco_share/pages/Login.dart';
 
 import 'package:tesco_share/Constants.dart';
+
+import 'ProductScan/ScannedProductView.dart';
 
 void main() => runApp(MyApp());
 
@@ -53,8 +53,5 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Login();
-
-
-
   }
 }

@@ -1,5 +1,7 @@
 class ProductScannedInfo{
   String barcode;
-  String expiryDate;
-  String useByDate;
+  DateTime expiryDate;
+  DateTime useByDate;
+  bool canBeFrozen;
+  int quantity;
 }
