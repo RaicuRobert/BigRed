@@ -21,7 +21,6 @@ class ProductListState extends State<ProductList>{
   ProductListState(this.category);
   bool iconPressed = false;
   var products;
-  var chosenProducts = List<Product>();
   bool showRequests = false;
   var str = "Available";
 
@@ -57,7 +56,7 @@ class ProductListState extends State<ProductList>{
         }
     }
     else {
-      products = chosenProducts;
+      initializeAcquiredProductsFromServer();
     }
 
     return Scaffold(
@@ -98,7 +97,7 @@ class ProductListState extends State<ProductList>{
                   });
                   var newProducts;
                   if (showRequests == true){
-                    newProducts = chosenProducts;
+                    initializeAcquiredProductsFromServer();
                     setState(() {
                       str = "Already requested";
                     });
@@ -142,7 +141,21 @@ class ProductListState extends State<ProductList>{
       });
     });
   }
+
+  void initializeAcquiredProductsFromServer(){
+    Future<List<Product>> allProductsFuture;
+    if (category != null)
+      allProductsFuture = REST.getRequestedProductsInCategory(category);
+    else
+      allProductsFuture = REST.getRequestedProducts(category);
+    allProductsFuture.then((allProducts){
+      setState(() {
+        this.products = allProducts;
+      });
+    });
+  }
 }
+
 
 class ProductRow extends StatelessWidget{
   final Product product;
