@@ -27,6 +27,28 @@ class REST{
     return products;
   }
 
+  static Future<List<Product>> getRequestedProductsInCategory(String category) async {
+    List<Product> products = List<Product>();
+
+    final response = await client.get(url + '/requestedInCategory/' + category);
+    var respData = json.decode(response.body);
+    products = getProductsFromJson(respData);
+
+    return products;
+  }
+
+  static Future<List<Product>> getRequestedProducts(String category) async {
+    List<Product> products = List<Product>();
+
+    final response = await client.get(url + '/requested');
+    var respData = json.decode(response.body);
+    products = getProductsFromJson(respData);
+
+    return products;
+  }
+
+
+
   static Future addProduct(Product product) async {
     await client.post(url + "/addProduct/", body: { 'name': product.name, 'quantity': product.quantity.toString(), 'category': product.category, 'barcode': product.barcode});
   }

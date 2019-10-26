@@ -64,6 +64,28 @@ router.get('/category/:category', ctx =>{
   ctx.response.status = 200;
 });
 
+//GET THE REQUESTED PRODUCTS IN A GIVEN CATEGORY
+router.get('/requestedInCategory/:category', ctx =>{
+  const category = ctx.params.category;
+  console.log(category)
+  prods = []
+  for (var prod  of requestedProducts)
+    {
+      console.log(prod['category'])
+      if (prod['category'] == category)
+        prods.push(prod);
+    }
+
+  ctx.response.body = prods;
+  ctx.response.status = 200;
+});
+
+//GET ALL THE REQUESTED PRODUCTS
+router.get('/requested', ctx =>{
+  ctx.response.body = requestedProducts;
+  ctx.response.status = 200;  
+});
+
 // ADD A NEW PRODUCT 
 router.post('/addProduct', ctx =>{
   const headers = ctx.request.body;
