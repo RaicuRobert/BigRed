@@ -36,11 +36,11 @@ class ProductScannedInfo{
     }
 
     if(expiryDate != null){
-      valid = valid && _IsEarlyerOrToday(expiryDate.add(new Duration(days: 1)), DateTime.now());
+      valid = valid && _IsEarlyerOrToday(DateTime.now(),expiryDate.add(new Duration(days: 1)));
     }
 
     if(useByDate != null){
-      if(_IsEarlyerOrToday(useByDate, DateTime.now()))
+      if(_IsEarlyerOrToday(DateTime.now(),useByDate))
       {
         if(_isEqual(useByDate,DateTime.now())){
           valid = valid && canBeFrozen;

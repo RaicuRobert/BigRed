@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:tesco_share/model/Product.dart';
 
 class REST{
-  static String url = "http://192.168.100.57:4001";
+  static String url = "http://192.168.100.56:4001";
   static var client = http.Client();
 
   static Future<List<Product>> getAllProducts() async {
@@ -28,7 +28,7 @@ class REST{
   }
 
   static Future addProduct(Product product) async {
-    await client.post(url + "/addProduct/", body: { 'name': product.name, 'quantity': product.quantity, 'category': product.category, 'barcode': product.barcode});
+    await client.post(url + "/addProduct/", body: { 'name': product.name, 'quantity': product.quantity.toString(), 'category': product.category, 'barcode': product.barcode});
   }
 
   static List<Product> getProductsFromJson(respData) {
