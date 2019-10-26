@@ -11,12 +11,26 @@ import 'package:tesco_share/Constants.dart';
 
 
 class ScannedProductView extends StatefulWidget {
+  ProductScannedInfo product;
+  int index;
+
+  ScannedProductView();
+  ScannedProductView.Edit(this.product, this.index);
+
   @override
-  ScannedProductViewState createState() => ScannedProductViewState();
+  ScannedProductViewState createState() {
+    if(product != null){
+      return ScannedProductViewState.Edit(product, index);
+    }
+    return ScannedProductViewState();
+  }
 }
+
 class ScannedProductViewState extends State<ScannedProductView> {
   final _formKey = GlobalKey<FormState>();
   ProductScannedInfo _productScannedInfo = new ProductScannedInfo();
+  int _index;
+  bool _isEdit;
   TextEditingController _barcodeController = new TextEditingController();
   TextEditingController _quantityController = new TextEditingController();
 
@@ -24,7 +38,16 @@ class ScannedProductViewState extends State<ScannedProductView> {
   DateFormat format = new DateFormat("dd.MM.yy");
   DateFormat formatFull = new DateFormat("dd.MM.yyyy");
 
+  ScannedProductViewState.Edit(ProductScannedInfo product, int index){
+    _productScannedInfo = ProductScannedInfo.clone(product);
+    _index = index;
+    _isEdit = true;
+    _barcodeController.value = new TextEditingValue(text: _productScannedInfo.barcode);
+    _quantityController.value = new TextEditingValue(text: _productScannedInfo.quantity.toString());
+  }
+
   ScannedProductViewState(){
+    _isEdit = false;
     _productScannedInfo.canBeFrozen = false;
     _productScannedInfo.quantity = 1;
     _quantityController.value = new TextEditingValue(text: _productScannedInfo.quantity.toString());
@@ -94,20 +117,7 @@ class ScannedProductViewState extends State<ScannedProductView> {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 16.0, horizontal: 16.0),
                                       child: RaisedButton(
-                                          onPressed: _productScannedInfo.isValid()? () {
-                                            final form = _formKey.currentState;
-                                            if (form.validate()) {
-                                              form.save();
-                                              scannedProducts.add(_productScannedInfo);
-                                              Navigator.push(context,MaterialPageRoute(
-                                                  builder: (context) => ScannedProductsView()
-                                              ));
-                                              //_user.save();
-                                              //_showDialog(context);
-                                            }
-                                          }: (){
-                                            Navigator.pop(context);
-                                          },
+                                          onPressed: _getButtonFunctionality,
                                           child: Text(_productScannedInfo.isValid() ? 'Save' : 'Invalid'))),
                             ])));})))));
       }
@@ -115,6 +125,39 @@ class ScannedProductViewState extends State<ScannedProductView> {
     Scaffold.of(context)
         .showSnackBar(SnackBar(content: Text('Submitting form')));
   }
+
+  void _getButtonFunctionality(){
+      bool isValid = _productScannedInfo.isValid();
+      final form = _formKey.currentState;
+
+      if(isValid == false){
+        Navigator.pop(context);
+        return;
+      }
+
+      if(_isEdit == true){
+        form.save();
+        scannedProducts.removeAt(_index);
+        scannedProducts.insert(_index, _productScannedInfo);
+        Navigator.pop(context);
+        return;
+      }
+
+
+
+      if (form.validate()) {
+        form.save();
+        scannedProducts.add(_productScannedInfo);
+        Navigator.push(context,MaterialPageRoute(
+            builder: (context) => ScannedProductsView()
+        ));
+        //_user.save();
+        //_showDialog(context);
+
+        return;
+      }
+  }
+
 
   Future<Null>  _barcodeFieldCheck() async{
       List<Barcode> barcodes = [];
@@ -193,7 +236,9 @@ class ScannedProductViewState extends State<ScannedProductView> {
           }
         },
         onSaved: (val) =>
-            setState(() => _productScannedInfo.barcode = val),
+            setState(()
+                {_productScannedInfo.barcode = val;
+                _productScannedInfo.apiData = null;}),
       ),)),
       Container(
           width: 60,

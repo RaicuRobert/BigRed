@@ -30,9 +30,18 @@ class ScannedProductsViewState extends State<ScannedProductsView> {
                 color: Colors.white,
                 child: Column(
                   children: <Widget>[
-                    FlatButton(child: Text("Scan new item"), onPressed: ()=> _scanItem(context),),
-                    _productList()
-                  ],
+                    _productList(),
+                    Container(
+                        margin: const EdgeInsets.only(bottom: 10, top: 10),
+                        child:
+                        RaisedButton(
+                          shape: RoundedRectangleBorder(
+
+                          borderRadius: BorderRadius.circular(32),
+                        ), padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
+                          color: lightColor,
+                          child: Text("Scan new item"), onPressed: ()=> _scanItem(context),)
+                        )],
                 ),
               ),
             )]
@@ -49,10 +58,49 @@ class ScannedProductsViewState extends State<ScannedProductsView> {
     return Expanded(child:ListView.separated(
       itemCount: scannedProducts.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(_displayName(scannedProducts[index])),
-          subtitle: Text('Quantity: ${scannedProducts[index].quantity}'),
+        return Dismissible(
+          // Show a red background as the item is swiped away.
+          background: Container(color: Colors.red),
+          key: Key(scannedProducts[index].barcode),
+          onDismissed: (direction) {
+            setState(() {
+              scannedProducts.removeAt(index);
+            });
+          },
+          child: ListTile(
+            title: Text(_displayName(scannedProducts[index])),
+            subtitle: Text('Quantity: ${scannedProducts[index].quantity}'),
+            trailing: Icon(Icons.edit),
+            onTap: (){
+              Navigator.push(context,MaterialPageRoute(
+                  builder: (context) => ScannedProductView.Edit(scannedProducts[index], index)
+              ));
+            },
+          ),
+          confirmDismiss: (DismissDirection direction) async {
+            final bool res = await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text("Confirm"),
+                  content: const Text("Are you sure you wish to delete this item?"),
+                  actions: <Widget>[
+                    FlatButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: const Text("DELETE")
+                    ),
+                    FlatButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: const Text("CANCEL"),
+                    ),
+                  ],
+                );
+              },
+            );
+            return res;
+          },
         );
+
       },
       separatorBuilder: (context, index) {
         return Divider();

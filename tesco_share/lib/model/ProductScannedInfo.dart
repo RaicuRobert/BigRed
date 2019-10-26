@@ -10,6 +10,8 @@ String brand;
 
 ApiDataScanned(this.description, this.brand);
 
+ApiDataScanned.clone(ApiDataScanned data) : this(data.description, data.brand);
+
 factory ApiDataScanned.fromJson(Map<String, dynamic> json) {
   return ApiDataScanned(
     json['description'],
@@ -91,4 +93,14 @@ class ProductScannedInfo{
     }
   }
 
+  ProductScannedInfo();
+
+  ProductScannedInfo.clone(ProductScannedInfo info){
+    this.barcode = info.barcode;
+    this.expiryDate = info.expiryDate;
+    this.useByDate = info.useByDate;
+    this.canBeFrozen = info.canBeFrozen;
+    this.quantity = info.quantity;
+    this.apiData = ApiDataScanned.clone(info.apiData);
+  }
 }
