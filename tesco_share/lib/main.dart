@@ -3,7 +3,7 @@ import 'package:tesco_share/Vision/Vision.dart';
 import 'package:tesco_share/pages/CategoryList.dart';
 import 'package:tesco_share/pages/Login.dart';
 
-import 'Colors.dart';
+import 'Constants.dart';
 
 void main() => runApp(MyApp());
 

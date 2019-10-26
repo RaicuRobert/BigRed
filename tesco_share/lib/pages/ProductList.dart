@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tesco_share/model/Product.dart';
 
-import '../Colors.dart';
+import '../Constants.dart';
 
 class ProductList extends StatefulWidget{
 
@@ -47,12 +47,12 @@ class ProductListState extends State<ProductList>{
           ],
         ),
 //        drawer: MainDrawer(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: acquireProduct,
-          child: Icon(Icons.add),
-          foregroundColor: Colors.white,
-          backgroundColor: darkColor,
-        ),
+//        floatingActionButton: FloatingActionButton(
+//          onPressed: acquireProduct,
+//          child: Icon(Icons.add),
+//          foregroundColor: Colors.white,
+//          backgroundColor: darkColor,
+//        ),
         body: Column(
             children: <Widget>[
               SwitchListTile(
@@ -103,18 +103,14 @@ class ProductListState extends State<ProductList>{
 
   List<Product> getDumbProducts() {
     var products = List<Product> ();
-    products.add(Product("Banana"));
-    products.add(Product("Chicken wings"));
-    products.add(Product("Tomato"));
-    products.add(Product("Milk"));
+    products.add(Product("Banana", 7));
+    products.add(Product("Chicken wings", 8));
+    products.add(Product("Tomato", 10));
+    products.add(Product("Milk", 3));
 
     return products;
   }
 
-
-
-  void acquireProduct() {
-  }
 }
 
 class ProductRow extends StatelessWidget{
@@ -142,12 +138,12 @@ class ProductRow extends StatelessWidget{
 
     final planetCard = new Container(
         width: 550,
-        height: 140,
+        height: 100,
         margin: const EdgeInsets.only(left: 3.0, right: 3.0),
         decoration: new BoxDecoration(
             shape: BoxShape.rectangle,
             borderRadius: new BorderRadius.circular(10.0),
-            color: darkColor
+            color: lightColor,
         ),
         child: Container(
             height: 100,
@@ -155,12 +151,12 @@ class ProductRow extends StatelessWidget{
             constraints: new BoxConstraints.expand(),
             child: new Column(
 
-              children: <Widget>[Align(alignment: Alignment.topLeft,child:Text(this.product.name, style: TextStyle(color: Colors.white,
-                  fontSize: 25.0, fontWeight: FontWeight.w400))
+              children: <Widget>[Align(alignment: Alignment.topLeft,child:Text(this.product.name, style: TextStyle(color: Colors.black,
+                  fontSize: 20.0, fontWeight: FontWeight.w400))
               ),
                 SizedBox(height:5),
-                Align(alignment: Alignment.topLeft,child:Text("Quantity: "+ "5", style: TextStyle(color: Colors.white,
-                    fontSize: 16.0)
+                Align(alignment: Alignment.topLeft,child:Text(" X "+ product.quantity.toString(), style: TextStyle(color: Colors.white,
+                    fontSize: 18.0)
                 )),
                 SizedBox(height:5),
 //                Text("Some other text", style: TextStyle(color: Colors.white,
@@ -175,12 +171,9 @@ class ProductRow extends StatelessWidget{
 //        height: 100.0,
       margin: const EdgeInsets.only(top: 10.0, bottom: 8.0),
       child: new FlatButton(
-//        onPressed: () => {
-//          Navigator.push(context,
-//              MaterialPageRoute(
-//                  builder: (context) => MessageScreen(product)
-//              ))
-//        },
+        onPressed: () => {
+          acquireProduct(product, context)
+        },
         child: new Stack(
           children: <Widget>[
             planetCard,
@@ -191,5 +184,74 @@ class ProductRow extends StatelessWidget{
     );
   }
 
+  void acquireProduct(Product product, context) async{
+    final number = await showDialog<double>(
+      context: context,
+      builder: (context) => QuantityPickerDialog(product)
+    );
 
+  }
+
+
+}
+
+class QuantityPickerDialog extends StatefulWidget {
+  Product product;
+
+  QuantityPickerDialog(this.product);
+  @override
+  State<StatefulWidget> createState() {
+    return QuantityPickerDialogState();
+  }
+
+}
+
+class QuantityPickerDialogState extends State<QuantityPickerDialog>{
+  double number = 1;
+  Product product;
+
+  @override
+  void initState(){
+    super.initState();
+    product = widget.product;
+  }
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('How many products?'),
+      content: Container(
+        height:80,
+        child: Column(
+          children:[
+        Slider(
+          value: number.toDouble(),
+          min: 1,
+          max: product.quantity.toDouble(),
+          divisions: product.quantity-1,
+          onChanged: (value) {
+            setState((){
+              number = value;
+            });
+          },
+        ),
+            Text(number.toInt().toString())
+          ],
+    )
+      ),
+      actions: <Widget>[
+        FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Close')),
+        FlatButton(
+          onPressed: () {
+            // RESERVE THE PRODUCT
+            Navigator.of(context).pop();
+          },
+          child: Text('Reserve!'),
+        )
+      ],
+    );
+  }
 }

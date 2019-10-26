@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tesco_share/pages/ProductList.dart';
 
-import '../Colors.dart';
+import '../Constants.dart';
 
 class CategoryList extends StatefulWidget{
   @override
@@ -129,7 +129,7 @@ class CategoryRow extends StatelessWidget{
         height: 140,
         margin: const EdgeInsets.only(left: 20.0, right: 20.0),
         decoration: new BoxDecoration(
-          color: darkColor,
+          color: lightColor,
           shape: BoxShape.rectangle,
           borderRadius: new BorderRadius.circular(30.0),
         ),
