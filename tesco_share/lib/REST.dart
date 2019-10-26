@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:tesco_share/model/Product.dart';
 
+import 'Constants.dart';
+import 'model/Shop.dart';
+
 class REST{
   static String url = "http://192.168.100.57:4001";
   static var client = http.Client();
@@ -70,5 +73,27 @@ class REST{
     }
 
     return products;
+  }
+
+  static Future<void> getShops() async{
+    final response = await http.get('https://dev.tescolabs.com/locations/search?sort=near: "47.4754267,19.0979369"', headers: {"Ocp-Apim-Subscription-Key": "abb267cda5ed4e089d9d94fb3d4f50c8"});
+    if (response.statusCode == 200) {
+      // If server returns an OK response, parse the JSON.
+      for(var data in json.decode(response.body)['results']) {
+        var geo = data['location']['geo']['coordinates'];
+        double long = geo['longitude'];
+        double latitude =geo['latitude'];
+        String name = data['location']['name'];
+        String distance = '${data['distanceFrom']['value']} ${data['distanceFrom']['unit']}';
+
+        Shop shop = new Shop(name, distance, latitude, long);
+
+        shops.add(shop);
+      }
+
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('Failed to load post; ${response.statusCode}');
+    }
   }
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:tesco_share/Constants.dart';
 
 class ApiDataScanned{
 String description;
@@ -26,6 +27,7 @@ class ProductScannedInfo{
   DateTime expiryDate;
   DateTime useByDate;
   bool canBeFrozen;
+  String category;
   int quantity;
 
   bool isValid(){
@@ -93,7 +95,10 @@ class ProductScannedInfo{
     }
   }
 
-  ProductScannedInfo();
+  ProductScannedInfo(){
+    this.quantity = 1;
+    this.category = categories[0];
+  }
 
   ProductScannedInfo.clone(ProductScannedInfo info){
     this.barcode = info.barcode;
@@ -102,5 +107,6 @@ class ProductScannedInfo{
     this.canBeFrozen = info.canBeFrozen;
     this.quantity = info.quantity;
     this.apiData = ApiDataScanned.clone(info.apiData);
+    this.category = info.category;
   }
 }

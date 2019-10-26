@@ -11,7 +11,7 @@ class CategoryList extends StatefulWidget{
 
 class CategoryListState extends State<CategoryList>{
 
-  var categories = ["Bakery", "Fruit&Vegetables", "Meat", "Chilled Foods", "Flowers&Herbs", "Others"];
+
   String _searchText = "";
   var _filtered_categories = new List();
   var _searchIcon = Icon(Icons.search);
@@ -23,7 +23,7 @@ class CategoryListState extends State<CategoryList>{
       if (_filter.text.isEmpty) {
         setState(() {
           this._searchText = "";
-          this._filtered_categories = this.categories;
+          this._filtered_categories = categories;
         });
       } else {
         setState(() {
