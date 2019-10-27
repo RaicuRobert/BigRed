@@ -115,7 +115,7 @@ class CategoryRow extends StatelessWidget{
   Widget build(BuildContext context) {
     final planetThumbnail = new Container(
         alignment: new FractionalOffset(0.0, 0.5),
-        margin: const EdgeInsets.only(left: 60.0),
+        margin: const EdgeInsets.only(left: 60.0, top: 15),
         child: new Container(
           width: 50.0,
           height: 50.0,
@@ -139,7 +139,7 @@ class CategoryRow extends StatelessWidget{
         ),
         child: Container(
 //            height: 100,
-            margin: const EdgeInsets.only(top: 25.0, left: 30.0, right: 18),
+            margin: const EdgeInsets.only(top: 25.0, left: 15.0, right: 18),
             constraints: new BoxConstraints.expand(),
             child: new Column(
               crossAxisAlignment: CrossAxisAlignment.center,
