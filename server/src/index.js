@@ -25,12 +25,16 @@ router.get('/', ctx => {
 
 
 products = [
-  {'name': 'Banana', 'category':'Fruit&Vegetable', 'quantity':7, 'barcode': '872353'},
-  {'name': 'Tomato', 'category':'Fruit&Vegetable', 'quantity':6, 'barcode': '546742'},
-  {'name': 'Orange', 'category':'Fruit&Vegetable', 'quantity':20, 'barcode': '913468'},
+  {'name': 'Banana', 'category':'Fruit&Vegetables', 'quantity':7, 'barcode': '872353'},
+  {'name': 'Tomato', 'category':'Fruit&Vegetables', 'quantity':6, 'barcode': '546742'},
+  {'name': 'Orange', 'category':'Fruit&Vegetables', 'quantity':20, 'barcode': '913468'},
   {'name': 'Tesco British Chicken Breast Portions 650G', 'category':'Meat', 'quantity':7, 'barcode': '9163539'},
   {'name': 'Richmond 12 Thick Pork Sausages 681G', 'category': 'Meat', 'quantity':3, 'barcode': '091374'},
-  {'name': 'Tesco Smoked Thick Cut Back Bacon 300G', 'category': 'Meat', 'quantity':5, 'barcode': '661083'}
+  {'name': 'Tesco Smoked Thick Cut Back Bacon 300G', 'category': 'Meat', 'quantity':5, 'barcode': '661083'},
+  {'name':'Tesco Cinnamon Tear And Share Bun', 'category':'Bakery', 'quantity':10, 'barcode':'877755'},
+  {'name':'Pagen Gifflar Cinnamon 260G', 'category':'Bakery', 'quantity':22, 'barcode':'683644'},
+  {'name':'Tesco Portuguese Custard Tart 4 Pack', 'category':'Bakery', 'quantity':9, 'barcode':'542309'},
+  {'name':'Tesco Cinnamon Swirl 2 Pack', 'category': 'Bakery', 'quantity':13, 'barcode': '786234'}
 ]
 
 requestedProducts = []
@@ -51,11 +55,11 @@ router.get('/all', ctx =>{
 // GET PRODUCTS IN A GIVEN CATEGORY
 router.get('/category/:category', ctx =>{
   const category = ctx.params.category;
-  console.log(category)
+  console.log(category);
   prods = []
   for (var prod  of products)
     {
-      console.log(prod['category'])
+      // console.log(prod['category'])
       if (prod['category'] == category)
         prods.push(prod);
     }
@@ -118,12 +122,31 @@ router.post('/delete', ctx =>{
       if (currQuantity - quantity == 0)
         {
           products.splice(i,1);
+          var requestedProd = {'name': prod['name'], 'category': prod['category'], 'quantity': quantity, 'barcode': prod['barcode']};
+      var found = false;
+      for (var req of requestedProducts){
+        if (req['name'] == requestedProd['name']){
+          req['quantity'] += requestedProd['quantity']
+          found = true;
+        }
+      }
+      if (found == false)
+        requestedProducts.push(requestedProd);
+        ctx.response.status = 200;
           return;
         }
       else
         prod['quantity'] = currQuantity - quantity;
-      var requestedProd = {'name': prod['name'], 'category': prod['category'], 'quantity': quantity, 'barcode': prod['barcode']}
-      requestedProducts.push(requestedProd);
+      var requestedProd = {'name': prod['name'], 'category': prod['category'], 'quantity': quantity, 'barcode': prod['barcode']};
+      var found = false;
+      for (var req of requestedProducts){
+        if (req['name'] == requestedProd['name']){
+          req['quantity'] += requestedProd['quantity']
+          found = true;
+        }
+      }
+      if (found == false)
+        requestedProducts.push(requestedProd);
     }
   }
   ctx.response.status = 200;

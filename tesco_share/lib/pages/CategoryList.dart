@@ -154,10 +154,11 @@ class CategoryRow extends StatelessWidget{
       margin: const EdgeInsets.only(top: 20.0, bottom: 8.0),
       child: new FlatButton(
         onPressed: () => {
-          Navigator.push(context,
-              MaterialPageRoute(
-                  builder: (context) => ProductList(category)
-              ))
+            Navigator.push(context,
+                MaterialPageRoute(
+                    builder: (context) => ProductList(category)
+                ))
+
         },
 
         child: new Stack(

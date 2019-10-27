@@ -56,7 +56,28 @@ class ProductListState extends State<ProductList>{
         }
     }
     else {
-      initializeAcquiredProductsFromServer();
+      if (products == null) {
+        initializeAcquiredProductsFromServer();
+        return Scaffold(
+            appBar: AppBar(
+              title: Text("$category"),
+              actions: <Widget>[
+                // Notify Button
+                IconButton(
+                  icon: notificationIcon,
+                  onPressed: () {
+                    setState(() {
+                      iconPressed = !iconPressed;
+                    });
+                  },
+                )
+              ],
+            ),
+            body: Center(
+                child: CircularProgressIndicator(backgroundColor: lightColor,)
+            )
+        );
+      }
     }
 
     return Scaffold(
@@ -122,7 +143,7 @@ class ProductListState extends State<ProductList>{
                     //itemExtent: 300.0, // THIS IS THE HEIGHT OF THE ITEM!!!!
                     shrinkWrap: true,
                     itemCount: products.length,
-                    itemBuilder: (_, index) => new ProductRow(context, products[index]),
+                    itemBuilder: (_, index) => new ProductRow(products[index]),
                   ),
                 ),
               )])
@@ -131,7 +152,7 @@ class ProductListState extends State<ProductList>{
 
   void initializeProductsFromServer() {
     Future<List<Product>> allProductsFuture;
-    if (category != null)
+    if (category != 'All Products')
       allProductsFuture = REST.getProductsByCategory(category);
     else
       allProductsFuture = REST.getAllProducts();
@@ -144,7 +165,7 @@ class ProductListState extends State<ProductList>{
 
   void initializeAcquiredProductsFromServer(){
     Future<List<Product>> allProductsFuture;
-    if (category != null)
+    if (category != 'All Products')
       allProductsFuture = REST.getRequestedProductsInCategory(category);
     else
       allProductsFuture = REST.getRequestedProducts(category);
@@ -157,11 +178,17 @@ class ProductListState extends State<ProductList>{
 }
 
 
-class ProductRow extends StatelessWidget{
-  final Product product;
-  final BuildContext parentContext;
+class ProductRow extends StatefulWidget {
+  Product product;
+  ProductRow(this.product);
 
-  ProductRow(this.parentContext, this.product);
+  @override
+  State<StatefulWidget> createState() => ProductRowState(product);
+}
+class ProductRowState extends State<ProductRow>{
+  final Product product;
+
+  ProductRowState(this.product);
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +260,10 @@ class ProductRow extends StatelessWidget{
       context: context,
       builder: (context) => QuantityPickerDialog(product)
     );
-    parentContext.widget.createElement();
+    print(number);
+//    initState();
+    setState(() {
+    });
 
 
   }
@@ -255,6 +285,7 @@ class QuantityPickerDialog extends StatefulWidget {
 class QuantityPickerDialogState extends State<QuantityPickerDialog>{
   double number = 1;
   Product product;
+
 
   @override
   void initState(){
@@ -295,6 +326,11 @@ class QuantityPickerDialogState extends State<QuantityPickerDialog>{
             // RESERVE THE PRODUCT
             REST.acquireProduct(product.name, number.toInt());
             Navigator.of(context).pop();
+//            initState();
+//            Navigator.push(context,
+//                MaterialPageRoute(
+//                    builder: (context) => ProductList(product.category)
+//                ));
           },
           child: Text('Reserve!'),
         )
