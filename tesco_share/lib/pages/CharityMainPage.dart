@@ -71,7 +71,7 @@ class CharityMainPageState extends State<CharityMainPage>{
       child: ListView.builder(
           itemCount: stores.length,
           itemBuilder: (context, index) => ListTile(
-              contentPadding: EdgeInsets.only(top: 10, left: 20),
+              contentPadding: EdgeInsets.only( top: 10, left: 20),
               leading: Icon(Icons.shopping_cart, color: Colors.red,),
               title: Text(stores[index].name, style: TextStyle(fontFamily: 'Poppins', fontSize: 16)),
               subtitle: Text(stores[index].distance),
