@@ -98,8 +98,8 @@ router.post('/addProduct', ctx =>{
   const category = headers.category;
   const quantity = headers.quantity;
   const barcode = headers.barcode;
-  console.log('Adding product with name ' + name + ', category ' + category + ', quantity ' + parseInt(quantity) + ', barcode: ' + barcode);
-  var newProd = {'name': name, 'category': category, 'quantity': quantity, 'barcode': barcode};
+  console.log('Adding product with name ' + name + ', category ' + category + ', quantity ' + quantity + ', barcode: ' + barcode);
+  var newProd = {'name': name, 'category': category, 'quantity': parseInt(quantity), 'barcode': barcode};
   products.push(newProd);
   ctx.response.status = 200;
 
