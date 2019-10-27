@@ -113,7 +113,7 @@ router.post('/addProduct', ctx =>{
     // console.log(prod['category'])
     if (prod['barcode'] == barcode){
       found = true;
-      prod[quantity] += quantity;
+      prod['quantity'] += parseInt(quantity);
     }
     
   }
