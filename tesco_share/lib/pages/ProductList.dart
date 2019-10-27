@@ -186,7 +186,7 @@ class ProductRow extends StatefulWidget {
   State<StatefulWidget> createState() => ProductRowState(product);
 }
 class ProductRowState extends State<ProductRow>{
-  final Product product;
+  Product product;
 
   ProductRowState(this.product);
 
@@ -256,18 +256,24 @@ class ProductRowState extends State<ProductRow>{
   }
 
   void acquireProduct(Product product, context) async{
-    final number = await showDialog<double>(
+    double number = await showDialog<double>(
       context: context,
       builder: (context) => QuantityPickerDialog(product)
     );
+    var no = number.toInt();
+    if (no != null){
+      setState(() {
+        this.product.quantity -= no;
+//        if (this.product.quantity == 0)
+//          this.product = null;
+      });
+    }
     print(number);
 //    initState();
     setState(() {
     });
 
-
   }
-
 
 }
 
@@ -294,23 +300,29 @@ class QuantityPickerDialogState extends State<QuantityPickerDialog>{
   }
   @override
   Widget build(BuildContext context) {
+
+    Widget widget;
+
+    if (product.quantity > 1)
+      widget = Slider(
+        value: number.toDouble(),
+        min: 1,
+        max: product.quantity.toDouble(),
+        divisions: product.quantity-1,
+        onChanged: (value) {
+          setState((){
+            number = value.toDouble();
+          });
+        },
+      );
+      widget = SizedBox(height: 2,);
     return AlertDialog(
       title: Text('How many products?'),
       content: Container(
         height:80,
         child: Column(
           children:[
-        Slider(
-          value: number.toDouble(),
-          min: 1,
-          max: product.quantity.toDouble(),
-          divisions: product.quantity-1,
-          onChanged: (value) {
-            setState((){
-              number = value.toDouble();
-            });
-          },
-        ),
+          widget,
             Text(number.toInt().toString())
           ],
     )
@@ -318,14 +330,14 @@ class QuantityPickerDialogState extends State<QuantityPickerDialog>{
       actions: <Widget>[
         FlatButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.pop(context, null);
             },
             child: Text('Close')),
         FlatButton(
           onPressed: () {
             // RESERVE THE PRODUCT
             REST.acquireProduct(product.name, number.toInt());
-            Navigator.of(context).pop();
+            Navigator.pop(context, number);
 //            initState();
 //            Navigator.push(context,
 //                MaterialPageRoute(
