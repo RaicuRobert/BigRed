@@ -87,10 +87,10 @@ router.get('/requestedInCategory/:category', ctx =>{
 //GET ALL THE REQUESTED PRODUCTS
 router.get('/requested', ctx =>{
   ctx.response.body = requestedProducts;
-  ctx.response.status = 200;  
+  ctx.response.status = 200;
 });
 
-// ADD A NEW PRODUCT 
+// ADD A NEW PRODUCT
 router.post('/addProduct', ctx =>{
   const headers = ctx.request.body;
   console.log(headers);
@@ -102,6 +102,8 @@ router.post('/addProduct', ctx =>{
   var newProd = {'name': name, 'category': category, 'quantity': quantity, 'barcode': barcode};
   products.push(newProd);
   ctx.response.status = 200;
+
+  broadcast(products);
 });
 
 //DELETE A PRODUCT

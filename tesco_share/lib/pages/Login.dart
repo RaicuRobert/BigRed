@@ -6,6 +6,8 @@ import 'package:tesco_share/ProductScan/ScannedProducts.dart';
 import 'package:tesco_share/pages/CategoryList.dart';
 import 'package:tesco_share/pages/CharityMainPage.dart';
 
+import '../REST.dart';
+
 class Login extends StatefulWidget{
 
   @override
@@ -14,6 +16,10 @@ class Login extends StatefulWidget{
 }
 
 class LoginState extends State<Login>{
+
+  LoginState(){
+    REST.startListening();
+  }
 
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
