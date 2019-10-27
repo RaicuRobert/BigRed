@@ -34,7 +34,14 @@ products = [
   {'name':'Tesco Cinnamon Tear And Share Bun', 'category':'Bakery', 'quantity':10, 'barcode':'877755'},
   {'name':'Pagen Gifflar Cinnamon 260G', 'category':'Bakery', 'quantity':22, 'barcode':'683644'},
   {'name':'Tesco Portuguese Custard Tart 4 Pack', 'category':'Bakery', 'quantity':9, 'barcode':'542309'},
-  {'name':'Tesco Cinnamon Swirl 2 Pack', 'category': 'Bakery', 'quantity':13, 'barcode': '786234'}
+  {'name':'Tesco Cinnamon Swirl 2 Pack', 'category': 'Bakery', 'quantity':13, 'barcode': '786234'},
+  {'name':'Tesco Greek Style Yogurt 500G', 'category': 'Chilled Foods', 'quantity': 14, 'barcode':'871332'},
+  {'name':'Onken Fat Free Strawberry Yogurt 450G', 'category':'Chilled Foods', 'quantity':36, 'barcode':'872354' },
+  {'name':'Cathedral City Mature Cheddar Cheese 350 G','category':'Chilled Foods', 'quantity':15, 'barcode':'234567' },
+  {'name':'Tesco Sweet Shop Cough Candy 200G','category':'Others', 'quantity':20, 'barcode':'654376' },
+  // {'name':'','category':'', 'quantity':4, 'barcode':'' },
+  // {'name':'','category':'', 'quantity':7, 'barcode':'' },
+  // {'name':'','category':'', 'quantity':16, 'barcode':'' }
 ]
 
 requestedProducts = []

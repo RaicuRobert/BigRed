@@ -15,7 +15,7 @@ import 'model/Shop.dart';
 class REST{
   static String url = "http://192.168.100.56:4001";
   static var client = http.Client();
-  static var channel = new IOWebSocketChannel.connect('ws://192.168.100.56:4001/svc/websockets');
+  static var channel = new IOWebSocketChannel.connect('ws://192.168.100.57:4001/svc/websockets');
 
   static HashMap<String, bool> notificationFilter = new HashMap<String, bool>();
   static StreamController notificationDoneController = new StreamController.broadcast();
