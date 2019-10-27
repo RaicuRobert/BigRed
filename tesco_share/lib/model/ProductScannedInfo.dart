@@ -83,11 +83,14 @@ class ProductScannedInfo{
       return this;
     }
 
-    final response = await http.get('https://dev.tescolabs.com/product/?gtin=${this.barcode}', headers: {"Ocp-Apim-Subscription-Key": "abb267cda5ed4e089d9d94fb3d4f50c8"});
+    final response = await http.get('https://dev.tescolabs.com/product/?gtin=${this.barcode}', headers: {"Ocp-Apim-Subscription-Key": "d8bc2a3938d54c03a415206c8a02223c"});
 
     if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      this.apiData = ApiDataScanned.fromJson(json.decode(response.body)['products'][0]);
+      var products = json.decode(response.body)['products'];
+      if(products.length>0)
+      {
+        this.apiData = ApiDataScanned.fromJson(products[0]);
+      }
       return this;
     } else {
       // If that response was not OK, throw an error.
@@ -106,7 +109,9 @@ class ProductScannedInfo{
     this.useByDate = info.useByDate;
     this.canBeFrozen = info.canBeFrozen;
     this.quantity = info.quantity;
-    this.apiData = ApiDataScanned.clone(info.apiData);
+    if(info.apiData != null){
+      this.apiData = ApiDataScanned.clone(info.apiData);
+    }
     this.category = info.category;
   }
 }

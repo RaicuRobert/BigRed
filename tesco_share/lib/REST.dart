@@ -139,7 +139,7 @@ class REST{
   }
 
   static Future<void> getShops() async{
-    final response = await http.get('https://dev.tescolabs.com/locations/search?sort=near: "47.4754267,19.0979369"', headers: {"Ocp-Apim-Subscription-Key": "abb267cda5ed4e089d9d94fb3d4f50c8"});
+    final response = await http.get('https://dev.tescolabs.com/locations/search?sort=near: "47.4754267,19.0979369"', headers: {"Ocp-Apim-Subscription-Key": "d8bc2a3938d54c03a415206c8a02223c"});
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
       for(var data in json.decode(response.body)['results']) {
