@@ -46,10 +46,13 @@ class CategoryListState extends State<CategoryList>{
       _filtered_categories = tempList;
     }
 
-    return ListView.builder(
-      itemExtent: 110,
-      itemCount: categories == null ? 0 : _filtered_categories.length,
-      itemBuilder: (_, index) => new CategoryRow(_filtered_categories[index]),
+    return GridView.count(
+      crossAxisCount: 2,
+
+      padding: const EdgeInsets.all(4),
+//      mainAxisSpacing: 1,
+//      crossAxisSpacing: 4,
+        children:_filtered_categories.map((f) => new CategoryRow(f)).toList()
     );
   }
 
@@ -91,14 +94,13 @@ class CategoryListState extends State<CategoryList>{
     return Scaffold(
         appBar: _buildBar(context),
 
-        body: Column(
-            children: <Widget>[Flexible(
-              child: new Container(
+        body:
+              new Container(
                 color: Colors.white,
                 child: _buildList(),
               ),
-            )]
-        ));
+
+        );
 
   }
 
@@ -113,7 +115,7 @@ class CategoryRow extends StatelessWidget{
   Widget build(BuildContext context) {
     final planetThumbnail = new Container(
         alignment: new FractionalOffset(0.0, 0.5),
-        margin: const EdgeInsets.only(left: 55.0),
+        margin: const EdgeInsets.only(left: 60.0),
         child: new Container(
           width: 50.0,
           height: 50.0,
@@ -129,14 +131,14 @@ class CategoryRow extends StatelessWidget{
 
     final planetCard = new Container(
         height: 140,
-        margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+        margin: const EdgeInsets.only(left: 5.0, right: 5.0),
         decoration: new BoxDecoration(
           color: lightColor,
           shape: BoxShape.rectangle,
-          borderRadius: new BorderRadius.circular(30.0),
+          borderRadius: new BorderRadius.circular(20.0),
         ),
         child: Container(
-            height: 100,
+//            height: 100,
             margin: const EdgeInsets.only(top: 25.0, left: 30.0, right: 18),
             constraints: new BoxConstraints.expand(),
             child: new Column(
@@ -151,7 +153,7 @@ class CategoryRow extends StatelessWidget{
 
     return new Container(
 //        height: 100.0,
-      margin: const EdgeInsets.only(top: 20.0, bottom: 8.0),
+      margin: const EdgeInsets.only(top: 20.0, bottom: 1.0),
       child: new FlatButton(
         onPressed: () => {
             Navigator.push(context,
