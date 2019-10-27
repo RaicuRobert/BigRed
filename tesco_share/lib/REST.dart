@@ -1,14 +1,57 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:tesco_share/model/Product.dart';
+import 'package:web_socket_channel/io.dart';
 
 import 'Constants.dart';
 import 'model/Shop.dart';
 
 class REST{
-  static String url = "http://192.168.100.57:4001";
+  static String url = "http://192.168.100.56:4001";
   static var client = http.Client();
+  static var channel = new IOWebSocketChannel.connect('ws://192.168.100.56:4001/svc/websockets');
+
+  static void startListening() {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+    var initializationSettingsAndroid =
+    new AndroidInitializationSettings('logo_transparent');
+    var initializationSettingsIOS = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (payload){
+          if (payload != null) {
+            debugPrint('notification payload: ' + payload);
+          }
+        });
+
+
+    channel.stream.listen(
+            (message) async{
+          print("Received message from websocket: $message");
+          var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+              '1', 'ROB', 'Charity',
+              importance: Importance.Max, priority: Priority.High);
+          var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+          var platformChannelSpecifics = new NotificationDetails(
+              androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+          await flutterLocalNotificationsPlugin.show(
+              0, 'plain title', 'plain body', platformChannelSpecifics,
+              payload: 'item id 2');
+        },
+        onError: (error, StackTrace stackTrace) {
+          // error handling
+        },
+        onDone: () {
+          // communication has been closed
+        });
+  }
+
+
 
   static Future<List<Product>> getAllProducts() async {
     List<Product> products = List<Product>();
