@@ -8,6 +8,7 @@ import 'package:tesco_share/Constants.dart';
 class ApiDataScanned{
 String description;
 String brand;
+String barcode;
 
 ApiDataScanned(this.description, this.brand);
 
@@ -83,6 +84,14 @@ class ProductScannedInfo{
       return this;
     }
 
+    for(var apd in apiDataCache){
+      if(apd.barcode == this.barcode){
+        this.apiData = apd;
+        print("ApiData from cache");
+        return this;
+      }
+    }
+
     final response = await http.get('https://dev.tescolabs.com/product/?gtin=${this.barcode}', headers: {"Ocp-Apim-Subscription-Key": "d8bc2a3938d54c03a415206c8a02223c"});
 
     if (response.statusCode == 200) {
@@ -90,6 +99,8 @@ class ProductScannedInfo{
       if(products.length>0)
       {
         this.apiData = ApiDataScanned.fromJson(products[0]);
+        this.apiData.barcode = barcode;
+        apiDataCache.add(this.apiData);
       }
       return this;
     } else {

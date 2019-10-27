@@ -1,4 +1,7 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tesco_share/model/ProductScannedInfo.dart';
 
 import 'model/Shop.dart';
@@ -36,6 +39,8 @@ const _dark = Color(0xFF7DB419);
 //MaterialColor lightColor = MaterialColor(0x49f540, color);
 
 List<Shop> shops = new List<Shop>();
+List<ApiDataScanned> apiDataCache = new List<ApiDataScanned>();
+HashMap<LatLng, List<Marker>> markerCache = new HashMap<LatLng, List<Marker>>();
 
 var logoPath = "images/logo_transparent.png";
 var categories = ["Bakery", "Fruit&Vegetables", "Meat", "Chilled Foods", "Flowers&Herbs", "Others", "All Products"];

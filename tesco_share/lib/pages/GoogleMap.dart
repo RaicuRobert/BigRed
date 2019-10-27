@@ -65,32 +65,50 @@ class MapSampleState extends State<MapSample> {
         icon: BitmapDescriptor.defaultMarkerWithHue(200),
       ));
     });
-    final response = await http.get('https://dev.tescolabs.com/locations/search?sort=near: "47.4754267,19.0979369"', headers: {"Ocp-Apim-Subscription-Key": "d8bc2a3938d54c03a415206c8a02223c"});
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      for(var data in json.decode(response.body)['results']) {
-        var geo = data['location']['geo']['coordinates'];
-        double long = geo['longitude'];
-        double latitude =geo['latitude'];
-        var position = LatLng(latitude, long);
-        setState(() {
-          _markers.add(Marker(
-            // This marker id can be anything that uniquely identifies each marker.
-            markerId: MarkerId(position.toString()),
-            position: position,
-            infoWindow: InfoWindow(
-              title: data['location']['name'],
-              snippet: '${data['distanceFrom']['value']} ${data['distanceFrom']['unit']}',
-              onTap: _navigateToShop
-            ),
-            icon: BitmapDescriptor.defaultMarker,
-          ));
-        });
-      }
 
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('Failed to load post; ${response.statusCode}');
+    if(markerCache.containsKey(LatLng(47.4754267,19.0979369))) {
+        setState(() {
+          for (var data in markerCache[LatLng(47.4754267,19.0979369)]) {
+            _markers.add(data);
+          }
+        });
+        print("Maps from cache");
+    }else {
+
+      final response = await http.get(
+          'https://dev.tescolabs.com/locations/search?sort=near: "47.4754267,19.0979369"',
+          headers: {
+            "Ocp-Apim-Subscription-Key": "d8bc2a3938d54c03a415206c8a02223c"
+          });
+      if (response.statusCode == 200) {
+        // If server returns an OK response, parse the JSON.
+
+          markerCache[LatLng(47.4754267,19.0979369)] = new List<Marker>();
+          setState(() {
+            for (var data in json.decode(response.body)['results']) {
+              var geo = data['location']['geo']['coordinates'];
+              double long = geo['longitude'];
+              double latitude = geo['latitude'];
+              var position = LatLng(latitude, long);
+              Marker mkr = Marker(
+                // This marker id can be anything that uniquely identifies each marker.
+                markerId: MarkerId(position.toString()),
+                position: position,
+                infoWindow: InfoWindow(
+                    title: data['location']['name'],
+                    snippet: '${data['distanceFrom']['value']} ${data['distanceFrom']['unit']}',
+                    onTap: _navigateToShop
+                ),
+                icon: BitmapDescriptor.defaultMarker,
+              );
+              markerCache[LatLng(47.4754267,19.0979369)].add(mkr);
+            _markers.add(mkr);
+          }
+          });
+      } else {
+        // If that response was not OK, throw an error.
+        throw Exception('Failed to load post; ${response.statusCode}');
+      }
     }
   }
 
