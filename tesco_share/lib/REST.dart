@@ -47,7 +47,7 @@ class REST{
           products.add(pr);
 
 
-          if(notificationFilter[pr] == true)
+          if(notificationFilter[pr.category] == true)
           {
             var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
                 '1', 'ROB', 'Charity',
