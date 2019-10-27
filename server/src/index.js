@@ -107,7 +107,18 @@ router.post('/addProduct', ctx =>{
   const barcode = headers.barcode;
   console.log('Adding product with name ' + name + ', category ' + category + ', quantity ' + quantity + ', barcode: ' + barcode);
   var newProd = {'name': name, 'category': category, 'quantity': parseInt(quantity), 'barcode': barcode};
-  products.push(newProd);
+  var found = false;
+  for (var prod  of products)
+  {
+    // console.log(prod['category'])
+    if (prod['barcode'] == barcode){
+      found = true;
+      prod[quantity] += quantity;
+    }
+    
+  }
+  if (found == false)
+    products.push(newProd);
   ctx.response.status = 200;
 
   broadcast(newProd);
