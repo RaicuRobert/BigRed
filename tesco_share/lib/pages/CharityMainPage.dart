@@ -24,7 +24,7 @@ class CharityMainPageState extends State<CharityMainPage>{
     getDumbStores();
 
     REST.startListening();
-    REST.notificationFilter[categories[0]]=true;
+    REST.notificationFilter[categories[5]]=true;
   }
 
 
