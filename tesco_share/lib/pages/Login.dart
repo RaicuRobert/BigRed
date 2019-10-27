@@ -5,6 +5,7 @@ import 'package:tesco_share/ProductScan/ScannedProducts.dart';
 
 import 'package:tesco_share/pages/CategoryList.dart';
 import 'package:tesco_share/pages/CharityMainPage.dart';
+import 'package:tesco_share/pages/Volunteer.dart';
 
 import '../REST.dart';
 
@@ -133,6 +134,15 @@ class LoginState extends State<Login>{
           )
       );
     }
+
+    if (usernameController.value.text == 'volunteer')
+      {
+        Navigator.push(context,
+            MaterialPageRoute(
+                builder: (context) => Volunteer()
+            )
+        );
+      }
   }
 
 
