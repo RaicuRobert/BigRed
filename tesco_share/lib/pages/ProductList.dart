@@ -315,6 +315,7 @@ class QuantityPickerDialogState extends State<QuantityPickerDialog>{
           });
         },
       );
+    else
       widget = SizedBox(height: 2,);
     return AlertDialog(
       title: Text('How many products?'),
