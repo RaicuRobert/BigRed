@@ -19,6 +19,7 @@ class LoginState extends State<Login>{
 
   LoginState(){
     REST.startListening();
+    REST.notificationFilter[categories[0]]=true;
   }
 
   final usernameController = TextEditingController();

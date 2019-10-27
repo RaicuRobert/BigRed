@@ -1,6 +1,9 @@
+import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:tesco_share/model/Product.dart';
@@ -10,9 +13,12 @@ import 'Constants.dart';
 import 'model/Shop.dart';
 
 class REST{
-  static String url = "http://192.168.100.57:4001";
+  static String url = "http://192.168.100.56:4001";
   static var client = http.Client();
   static var channel = new IOWebSocketChannel.connect('ws://192.168.100.56:4001/svc/websockets');
+
+  static HashMap<String, bool> notificationFilter = new HashMap<String, bool>();
+  static StreamController notificationDoneController = new StreamController.broadcast();
 
   static void startListening() {
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
@@ -33,15 +39,29 @@ class REST{
     channel.stream.listen(
             (message) async{
           print("Received message from websocket: $message");
-          var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-              '1', 'ROB', 'Charity',
-              importance: Importance.Max, priority: Priority.High);
-          var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
-          var platformChannelSpecifics = new NotificationDetails(
-              androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-          await flutterLocalNotificationsPlugin.show(
-              0, 'plain title', 'plain body', platformChannelSpecifics,
-              payload: 'item id 2');
+
+
+          List<Product> products = new List<Product>();
+
+        Product pr =Product.fromJson(json.decode(message));
+          products.add(pr);
+
+
+          if(notificationFilter[pr] == true)
+          {
+            var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+                '1', 'ROB', 'Charity',
+                importance: Importance.Max, priority: Priority.High);
+            var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+            var platformChannelSpecifics = new NotificationDetails(
+                androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+            await flutterLocalNotificationsPlugin.show(
+                0, 'New inventory available', 'based on prefences', platformChannelSpecifics,
+                payload: 'item id 2');
+          }
+
+
+          notificationDoneController.add(products);
         },
         onError: (error, StackTrace stackTrace) {
           // error handling

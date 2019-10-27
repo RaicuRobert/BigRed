@@ -103,7 +103,7 @@ router.post('/addProduct', ctx =>{
   products.push(newProd);
   ctx.response.status = 200;
 
-  broadcast(products);
+  broadcast(newProd);
 });
 
 //DELETE A PRODUCT
