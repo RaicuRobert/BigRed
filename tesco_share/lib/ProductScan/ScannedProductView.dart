@@ -173,9 +173,7 @@ class ScannedProductViewState extends State<ScannedProductView> {
       if (form.validate()) {
         form.save();
         scannedProducts.add(_productScannedInfo);
-        Navigator.push(context,MaterialPageRoute(
-            builder: (context) => ScannedProductsView()
-        ));
+        Navigator.pop(context);
         //_user.save();
         //_showDialog(context);
 
