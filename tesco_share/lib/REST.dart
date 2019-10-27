@@ -17,6 +17,7 @@ class REST{
   static var client = http.Client();
   static var channel = new IOWebSocketChannel.connect('ws://104.248.20.49:4001/svc/websockets');
 
+
   static HashMap<String, bool> notificationFilter = new HashMap<String, bool>();
   static StreamController notificationDoneController = new StreamController.broadcast();
 
