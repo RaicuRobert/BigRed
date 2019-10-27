@@ -25,9 +25,9 @@ router.get('/', ctx => {
 
 
 products = [
-  {'name': 'Banana', 'category':'Fruit&Vegetable', 'quantity':7, 'barcode': '872353'},
-  {'name': 'Tomato', 'category':'Fruit&Vegetable', 'quantity':6, 'barcode': '546742'},
-  {'name': 'Orange', 'category':'Fruit&Vegetable', 'quantity':20, 'barcode': '913468'},
+  {'name': 'Banana', 'category':'Fruit&Vegetables', 'quantity':7, 'barcode': '872353'},
+  {'name': 'Tomato', 'category':'Fruit&Vegetables', 'quantity':6, 'barcode': '546742'},
+  {'name': 'Orange', 'category':'Fruit&Vegetables', 'quantity':20, 'barcode': '913468'},
   {'name': 'Tesco British Chicken Breast Portions 650G', 'category':'Meat', 'quantity':7, 'barcode': '9163539'},
   {'name': 'Richmond 12 Thick Pork Sausages 681G', 'category': 'Meat', 'quantity':3, 'barcode': '091374'},
   {'name': 'Tesco Smoked Thick Cut Back Bacon 300G', 'category': 'Meat', 'quantity':5, 'barcode': '661083'},

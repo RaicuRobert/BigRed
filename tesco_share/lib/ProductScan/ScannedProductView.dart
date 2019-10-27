@@ -119,11 +119,11 @@ class ScannedProductViewState extends State<ScannedProductView> {
                                     iconSize: 24,
                                     elevation: 16,
                                     style: TextStyle(
-                                        color: Colors.deepPurple
+                                        color: Colors.black
                                     ),
                                     underline: Container(
                                       height: 2,
-                                      color: Colors.deepPurpleAccent,
+                                      color: darkColor,
                                     ),
                                     onChanged: (String newValue) {
                                       setState(() {
@@ -362,12 +362,12 @@ class ScannedProductViewState extends State<ScannedProductView> {
                               Icon(
                                 Icons.date_range,
                                 size: 18.0,
-                                color: Colors.teal,
+                                color: darkColor,
                               ),
                               Text(
                                   _productScannedInfo.useByDate == null? "Not set" :  formatFull.format(_productScannedInfo.useByDate),
                                 style: TextStyle(
-                                    color: Colors.teal,
+                                    color: darkColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18.0),
                               ),
@@ -379,7 +379,7 @@ class ScannedProductViewState extends State<ScannedProductView> {
                     Text(
                       "  Change",
                       style: TextStyle(
-                          color: Colors.teal,
+                          color: darkColor,
                           fontWeight: FontWeight.bold,
                           fontSize: 18.0),
                     ),
@@ -442,12 +442,12 @@ class ScannedProductViewState extends State<ScannedProductView> {
                               Icon(
                                 Icons.date_range,
                                 size: 18.0,
-                                color: Colors.teal,
+                                color: darkColor,
                               ),
                               Text(
                                 _productScannedInfo.expiryDate == null? "Not set" : formatFull.format(_productScannedInfo.expiryDate),
                                 style: TextStyle(
-                                    color: Colors.teal,
+                                    color: darkColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18.0),
                               ),
@@ -459,7 +459,7 @@ class ScannedProductViewState extends State<ScannedProductView> {
                     Text(
                       "  Change",
                       style: TextStyle(
-                          color: Colors.teal,
+                          color: darkColor,
                           fontWeight: FontWeight.bold,
                           fontSize: 18.0),
                     ),
