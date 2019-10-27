@@ -57,7 +57,7 @@ class REST{
             var platformChannelSpecifics = new NotificationDetails(
                 androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
             await flutterLocalNotificationsPlugin.show(
-                0, 'New inventory available', 'based on prefences', platformChannelSpecifics,
+                0, 'New items!', 'Some new items that might interest you were added', platformChannelSpecifics,
                 payload: 'item id 2');
           }
 

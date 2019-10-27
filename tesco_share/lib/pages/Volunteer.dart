@@ -12,7 +12,7 @@ class Volunteer extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Volunteer')
+        title: Text('Pending Deliveries')
       ),
       body:
         ListView.builder(
