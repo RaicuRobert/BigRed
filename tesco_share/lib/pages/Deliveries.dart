@@ -46,25 +46,32 @@ class DeliveriesState extends State<Deliveries> {
         initialCameraPosition: _kLake,
         markers: _markers,
         onMapCreated: (GoogleMapController controller) {
-          _markers.add(Marker(
-            // This marker id can be anything that uniquely identifies each marker.
-            markerId: MarkerId( delivery['from']),
-            position:  delivery['latlng_from'],
-            infoWindow: InfoWindow(
-              title: delivery['from'],
-            ),
-            icon: BitmapDescriptor.defaultMarkerWithHue(200),
-          ));
-          _markers.add(Marker(
-            // This marker id can be anything that uniquely identifies each marker.
-            markerId: MarkerId( delivery['to']),
-            position:  delivery['latlng_to'],
-            infoWindow: InfoWindow(
-              title: delivery['to'],
-            ),
-            icon: BitmapDescriptor.defaultMarkerWithHue(200),
-          ));
+
           _controller.complete(controller);
+
+          setState(() {
+            _markers.add(Marker(
+              // This marker id can be anything that uniquely identifies each marker.
+              markerId: MarkerId( delivery['from']),
+              position:  delivery['latlng_from'],
+              infoWindow: InfoWindow(
+                  title: delivery['from'],
+
+                  snippet: delivery['observations']
+              ),
+              icon: BitmapDescriptor.defaultMarkerWithHue(200),
+            ));
+            _markers.add(Marker(
+              // This marker id can be anything that uniquely identifies each marker.
+              markerId: MarkerId( delivery['to']),
+              position:  delivery['latlng_to'],
+              infoWindow: InfoWindow(
+                  title: delivery['to'],
+                  snippet: delivery['observations']
+              ),
+              icon: BitmapDescriptor.defaultMarker,
+            ));
+          });
         },
       )
     );
