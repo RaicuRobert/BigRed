@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tesco_share/Constants.dart';
+import 'package:tesco_share/pages/CategoryList.dart';
 
 class MapSample extends StatefulWidget {
   @override
@@ -80,6 +81,7 @@ class MapSampleState extends State<MapSample> {
             infoWindow: InfoWindow(
               title: data['location']['name'],
               snippet: '${data['distanceFrom']['value']} ${data['distanceFrom']['unit']}',
+              onTap: _navigateToShop
             ),
             icon: BitmapDescriptor.defaultMarker,
           ));
@@ -90,6 +92,12 @@ class MapSampleState extends State<MapSample> {
       // If that response was not OK, throw an error.
       throw Exception('Failed to load post; ${response.statusCode}');
     }
+  }
+
+  void _navigateToShop(){
+    Navigator.push(context,MaterialPageRoute(
+        builder: (context) => CategoryList()
+    ));
   }
 
 
