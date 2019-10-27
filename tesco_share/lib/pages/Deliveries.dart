@@ -73,7 +73,10 @@ class DeliveriesState extends State<Deliveries> {
             ));
           });
         },
-      )
+      ),
+      floatingActionButton: FloatingActionButton.extended(label: Text("Volunteer!") ,onPressed: (){
+        Navigator.pop(context);
+      },),
     );
   }
 
