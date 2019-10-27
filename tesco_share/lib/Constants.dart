@@ -38,5 +38,5 @@ const _dark = Color(0xFF7DB419);
 List<Shop> shops = new List<Shop>();
 
 var logoPath = "images/logo_transparent.png";
-var categories = ["Uncategorized", "Bakery", "Fruit&Vegetables", "Meat", "Chilled Foods", "Flowers&Herbs", "Others"];
+var categories = ["Bakery", "Fruit&Vegetables", "Meat", "Chilled Foods", "Flowers&Herbs", "Others", "All Products"];
 List<ProductScannedInfo> scannedProducts = new List<ProductScannedInfo>();

@@ -152,7 +152,7 @@ class ProductListState extends State<ProductList>{
 
   void initializeProductsFromServer() {
     Future<List<Product>> allProductsFuture;
-    if (category != null)
+    if (category != 'All Products')
       allProductsFuture = REST.getProductsByCategory(category);
     else
       allProductsFuture = REST.getAllProducts();
@@ -165,7 +165,7 @@ class ProductListState extends State<ProductList>{
 
   void initializeAcquiredProductsFromServer(){
     Future<List<Product>> allProductsFuture;
-    if (category != null)
+    if (category != 'All Products')
       allProductsFuture = REST.getRequestedProductsInCategory(category);
     else
       allProductsFuture = REST.getRequestedProducts(category);

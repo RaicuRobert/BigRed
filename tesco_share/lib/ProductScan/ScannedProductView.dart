@@ -130,8 +130,7 @@ class ScannedProductViewState extends State<ScannedProductView> {
                                         _productScannedInfo.category = newValue;
                                       });
                                     },
-                                    items: categories
-                                        .map<DropdownMenuItem<String>>((String value) {
+                                    items: categories.reversed.map<DropdownMenuItem<String>>((String value) {
                                       return DropdownMenuItem<String>(
                                         value: value,
                                         child: Text(value),
